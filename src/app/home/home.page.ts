@@ -49,7 +49,7 @@ export class HomePage {
 
   addGasto() {
     const newGasto = this.newGasto;
-    this.gastosSrv.createGasto(newGasto);
+    this.gastosSrv.createGasto(newGasto).then(r => console.log('HomePage::addGasto::r:${r}'));
     this.gastos.push(newGasto);
     console.log('HomePage::addGasto: ', newGasto)
     
