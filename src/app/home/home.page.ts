@@ -5,7 +5,8 @@ import {
   IonHeader, IonToolbar, IonTitle, IonContent,
   IonCard, IonCardHeader, IonCardContent, IonCardTitle,
   IonCol, IonButton, IonIcon,
-  IonInput, IonItem, IonLabel, IonSelectOption, IonSelect
+  IonInput, IonItem, IonLabel, IonSelectOption, IonSelect,
+  IonDatetime
 } from '@ionic/angular/standalone';
 import { addIcons } from "ionicons"
 import { add } from 'ionicons/icons'
@@ -19,9 +20,9 @@ import { GastosService } from '../services/gastos.service';
   standalone: true,
   imports: [IonHeader, IonToolbar, IonTitle, IonContent,
     IonCard, IonCardHeader, IonCardContent, IonCardTitle,
-    IonCol, IonButton, IonIcon,
+    IonButton, IonIcon,
     CommonModule, FormsModule, IonInput,
-    IonItem, IonLabel, IonSelectOption, IonSelect
+    IonItem, IonLabel, IonSelectOption, IonSelect, IonDatetime
   ],
 })
 export class HomePage {
@@ -52,7 +53,7 @@ export class HomePage {
     this.gastosSrv.createGasto(newGasto).then(r => console.log('HomePage::addGasto::r:${r}'));
     this.gastos.push(newGasto);
     console.log('HomePage::addGasto: ', newGasto)
-    
+
 
     // Reset form fields
     // this.newGasto = {
