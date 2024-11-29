@@ -1,20 +1,65 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Blank
+      Gastos
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+  <!-- Form to add a new gasto -->
+  <form (ngSubmit)="addGasto()" #gastoForm="ngForm" class="ion-padding">
+    <ion-item>
+      <ion-label position="stacked">Description</ion-label>
+      <ion-input type="text" placeholder="Enter description" [(ngModel)]="newGasto.description" name="description"
+        required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Store</ion-label>
+      <ion-input type="text" placeholder="Enter store / commerce" [(ngModel)]="newGasto.store" name="store"
+        required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Value</ion-label>
+      <ion-input type="number" placeholder="Enter value" [(ngModel)]="newGasto.value" name="value" required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Currency</ion-label>
+      <ion-select [(ngModel)]="newGasto.currency" name="currency" required>
+        <ion-select-option value="AUD">AUD</ion-select-option>
+        <ion-select-option value="USD">USD</ion-select-option>
+        <ion-select-option value="EUR">EUR</ion-select-option>
+        <ion-select-option value="COP">COP</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Date & Time</ion-label>
+      <ion-datetime display-format="MMM DD, YYYY HH:mm" [(ngModel)]="newGasto.datetime" name="datetime"
+        required></ion-datetime>
+    </ion-item>
+
+    <ion-button expand="block" type="submit" [disabled]="!gastoForm.valid">
+      Add Gasto <ion-icon slot="icon-only" name="add"></ion-icon>
+    </ion-button>
+  </form>
+
+  <!-- List of gastos -->
+  <div *ngFor="let gasto of gastos;" (click)="deleteGasto(gasto.id)">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>{{ gasto.description }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        Description: {{ gasto.description }}<br />
+        Value: {{ gasto.value }} {{ gasto.currency }}<br />
+        Date: {{ gasto.datetime | date: 'short' }}
+      </ion-card-content>
+    </ion-card>
   </div>
+
 </ion-content>
