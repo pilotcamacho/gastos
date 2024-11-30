@@ -28,11 +28,11 @@ export class GastosService {
     return gastos;
   }
 
-  async createGasto(gastoData: { description: string, store: string, value: number, currency: string }): Promise<void> {
+  async createGasto(gastoData: { description: string, store: string, value: number, currency: string , paymentMethod: string }): Promise<any> {
     const currentLocation = await this.locationSrv.getCurrentLocation()
     const { data: createdGasto, errors } = await client.models.Gasto.create({ ...gastoData, location: currentLocation, datetime: new Date().toISOString() });
     console.log('GastosService::createGasto', createdGasto, errors);
-    // return createdGasto
+    return createdGasto
   }
 
   async deleteGasto(gastoId: string): Promise<void> {

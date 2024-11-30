@@ -1,16 +1,15 @@
 import { Component } from '@angular/core';
-import { CommonModule, NgFor } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
   IonHeader, IonToolbar, IonTitle, IonContent,
   IonCard, IonCardHeader, IonCardContent, IonCardTitle,
-  IonCol, IonButton, IonIcon,
+  IonButton, IonIcon,
   IonInput, IonItem, IonLabel, IonSelectOption, IonSelect,
-  IonDatetime
+  IonDatetime, ToastController
 } from '@ionic/angular/standalone';
-import { addIcons } from "ionicons"
-import { add } from 'ionicons/icons'
-import { ToastController } from '@ionic/angular';
+import { addIcons } from "ionicons";
+import { add } from 'ionicons/icons';
 import { GastosService } from '../services/gastos.service';
 
 @Component({
@@ -32,39 +31,70 @@ export class HomePage {
   newGasto = {
     description: '',
     store: '',
-    value: 0 as number,
+    value: null as number | null, // Allow `null` for default value
     currency: '',
+    paymentMethod: '',
     datetime: new Date().toISOString(),
   };
 
   constructor(
-    public gastosSrv: GastosService
+    public gastosSrv: GastosService,
+    private toastController: ToastController
   ) {
     addIcons({ add });
+  }
+
+  async ngOnInit() {
+    await this.loadGastos(); // Load gastos on initialization
+  }
+
+  async loadGastos() {
+    try {
+      this.gastos = await this.gastosSrv.listGastos(); // Fetch real data
+      console.log('HomePage::loadGastos: ', this.gastos);
+    } catch (error) {
+      console.error('Error loading gastos:', error);
+    }
+  }
+
+  async addGasto() {
+    const newGasto = { ...this.newGasto, value: this.newGasto.value || 0 };
+    try {
+      const createdGasto = await this.gastosSrv.createGasto(newGasto);
+      if (createdGasto) {
+        await this.messageCreatedOk();
+        await this.loadGastos(); // Reload gastos to reflect real data
+      }
+    } catch (error) {
+      console.error('Error creating gasto:', error);
+    }
+
+    // Reset form fields to default
+    this.newGasto = {
+      description: '',
+      store: '',
+      value: null,
+      currency: '',
+      paymentMethod: '',
+      datetime: new Date().toISOString()
+    };
   }
 
   deleteGasto(gastoId: string) {
     console.log('HomePage::deleteGasto: ', gastoId);
   }
 
-
-  addGasto() {
-    const newGasto = this.newGasto;
-    this.gastosSrv.createGasto(newGasto).then(r => console.log('HomePage::addGasto::r:${r}'));
-    this.gastos.push(newGasto);
-    console.log('HomePage::addGasto: ', newGasto)
-
-
-    // Reset form fields
-    // this.newGasto = {
-    //   description: '',
-    //   value: 0,
-    //   currency: '',
-    //   datetime: new Date().toISOString(),
-    // };
-  }
-
   goToGasto() {
     console.log('HomePage::goToGasto');
+  }
+
+  async messageCreatedOk() {
+    const toast = await this.toastController.create({
+      message: 'Gasto creado exitosamente.',
+      duration: 2000,
+      position: 'top',
+      color: 'success',
+    });
+    await toast.present();
   }
 }

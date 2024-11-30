@@ -6,7 +6,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content fullscreen="true" class="ion-padding">
 
   <!-- Form to add a new gasto -->
   <form (ngSubmit)="addGasto()" #gastoForm="ngForm" class="ion-padding">
@@ -34,6 +34,16 @@
         <ion-select-option value="USD">USD</ion-select-option>
         <ion-select-option value="EUR">EUR</ion-select-option>
         <ion-select-option value="COP">COP</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Method</ion-label>
+      <ion-select [(ngModel)]="newGasto.currency" name="currency" required>
+        <ion-select-option value="CREDIT CARD">AUD</ion-select-option>
+        <ion-select-option value="DEBOT CARD">AUD</ion-select-option>
+        <ion-select-option value="CASH">USD</ion-select-option>
+        <ion-select-option value="OTHER">USD</ion-select-option>
       </ion-select>
     </ion-item>
 

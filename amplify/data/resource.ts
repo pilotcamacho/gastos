@@ -14,6 +14,7 @@ const schema = a.schema({
       store: a.string().required(),
       value: a.float().required(),
       currency: a.string().required(),
+      paymentMethod: a.string().required(),
       datetime: a.datetime().required(),
       location: a.customType({
         lat: a.float().required(),
