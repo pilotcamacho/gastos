@@ -9,7 +9,7 @@ type Gasto = Schema['Gasto']['type'];
 
 const client = generateClient<Schema>();
 
-const gastoSelectionSet = ['id', 'description', 'value', 'datetime'] as const;
+const gastoSelectionSet = ['id', 'description', 'value', 'currency', 'paymentMethod', 'datetime'] as const;
 type GastoSelectionSet = SelectionSet<Schema['Gasto']['type'], typeof gastoSelectionSet>;
 
 
@@ -28,7 +28,7 @@ export class GastosService {
     return gastos;
   }
 
-  async createGasto(gastoData: { description: string, store: string, value: number, currency: string , paymentMethod: string }): Promise<any> {
+  async createGasto(gastoData: { description: string, store: string, value: number, currency: string, paymentMethod: string }): Promise<any> {
     const currentLocation = await this.locationSrv.getCurrentLocation()
     const { data: createdGasto, errors } = await client.models.Gasto.create({ ...gastoData, location: currentLocation, datetime: new Date().toISOString() });
     console.log('GastosService::createGasto', createdGasto, errors);

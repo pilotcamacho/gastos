@@ -39,11 +39,11 @@
 
     <ion-item>
       <ion-label position="stacked">Method</ion-label>
-      <ion-select [(ngModel)]="newGasto.currency" name="currency" required>
-        <ion-select-option value="CREDIT CARD">AUD</ion-select-option>
-        <ion-select-option value="DEBOT CARD">AUD</ion-select-option>
-        <ion-select-option value="CASH">USD</ion-select-option>
-        <ion-select-option value="OTHER">USD</ion-select-option>
+      <ion-select [(ngModel)]="newGasto.paymentMethod" name="paymentMethod" required>
+        <ion-select-option value="CREDIT CARD">CREDIT</ion-select-option>
+        <ion-select-option value="DEBIT CARD">DEBIT</ion-select-option>
+        <ion-select-option value="CASH">CASH</ion-select-option>
+        <ion-select-option value="OTHER">OTHER</ion-select-option>
       </ion-select>
     </ion-item>
 
@@ -67,6 +67,7 @@
       <ion-card-content>
         Description: {{ gasto.description }}<br />
         Value: {{ gasto.value }} {{ gasto.currency }}<br />
+        Method: {{ gasto.paymentMethod }}<br />
         Date: {{ gasto.datetime | date: 'short' }}
       </ion-card-content>
     </ion-card>
