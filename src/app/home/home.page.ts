@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
@@ -24,7 +24,7 @@ import { GastosService } from '../services/gastos.service';
     IonItem, IonLabel, IonSelectOption, IonSelect, IonDatetime
   ],
 })
-export class HomePage {
+export class HomePage implements OnInit {
 
   gastos: any[] = [];
 
@@ -32,8 +32,8 @@ export class HomePage {
     description: '',
     store: '',
     value: null as number | null, // Allow `null` for default value
-    currency: '',
-    paymentMethod: '',
+    currency: 'AUD',
+    paymentMethod: 'CREDIT',
     datetime: new Date().toISOString(),
   };
 
@@ -74,8 +74,8 @@ export class HomePage {
       description: '',
       store: '',
       value: null,
-      currency: '',
-      paymentMethod: '',
+      currency: 'AUD',
+      paymentMethod: 'CREDIT',
       datetime: new Date().toISOString()
     };
   }
