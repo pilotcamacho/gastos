@@ -97,4 +97,17 @@ export class HomePage {
     });
     await toast.present();
   }
+
+  // Getter to convert UTC datetime to local time for display
+  get localDatetime(): string {
+    const utcDate = new Date(this.newGasto.datetime);
+    return new Date(utcDate.getTime() - utcDate.getTimezoneOffset() * 60000).toISOString();
+  }
+
+  // Setter to ensure selected local time is stored as UTC
+  set localDatetime(value: string) {
+    const localDate = new Date(value);
+    this.newGasto.datetime = new Date(localDate.getTime() + localDate.getTimezoneOffset() * 60000).toISOString();
+  }
+
 }
