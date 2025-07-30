@@ -19,8 +19,10 @@ const schema = a.schema({
       location: a.customType({
         lat: a.float().required(),
         long: a.float().required(),
-      })
+      }),
+      usuario: a.string().required(),
     })
+    .secondaryIndexes((index) => [index("usuario").sortKeys(['datetime'])])
     .authorization((allow) => [allow.group('Admin'), allow.owner(), allow.authenticated().to(['read'])]),
 });
 

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 
+import { fetchAuthSession, getCurrentUser } from '@aws-amplify/auth';
 
 import { generateClient, SelectionSet } from 'aws-amplify/data';
 import type { Schema } from '../../../amplify/data/resource';
@@ -22,15 +23,36 @@ export class GastosService {
     private locationSrv: LocationService
   ) { }
 
+  // async listGastos(): Promise<GastoSelectionSet[]> {
+  //   const { data: gastos, errors } = await client.models.Gasto.list({ selectionSet: gastoSelectionSet });
+  //   console.log('GastosService::listGastos', gastos, errors);
+  //   return gastos;
+  // }
+
   async listGastos(): Promise<GastoSelectionSet[]> {
-    const { data: gastos, errors } = await client.models.Gasto.list({ selectionSet: gastoSelectionSet });
+    const user = await getCurrentUser();
+    // const session = await fetchAuthSession(); ...session.identityId + "::" +
+    const usuario = user.username
+    const { data: gastos, errors } = await client.models.Gasto.listGastoByUsuarioAndDatetime(
+      { usuario: usuario },
+      {
+        sortDirection: 'DESC',          // ✅ sort newest to oldest
+        selectionSet: gastoSelectionSet,
+        limit: 20                        // optional: limit results
+      }
+    );
     console.log('GastosService::listGastos', gastos, errors);
     return gastos;
   }
 
-  async createGasto(gastoData: { description: string, store: string, value: number, currency: string, paymentMethod: string }): Promise<any> {
+
+  async createGasto(gastoData: { description: string, store: string, value: number, currency: string, paymentMethod: string, datetime: string}): Promise<any> {
     const currentLocation = await this.locationSrv.getCurrentLocation()
-    const { data: createdGasto, errors } = await client.models.Gasto.create({ ...gastoData, location: currentLocation, datetime: new Date().toISOString() });
+
+    const user = await getCurrentUser();
+    // const session = await fetchAuthSession(); ... session.identityId + "::" + 
+    const usuario = user.username
+    const { data: createdGasto, errors } = await client.models.Gasto.create({ ...gastoData, usuario: usuario, location: currentLocation });
     console.log('GastosService::createGasto', createdGasto, errors);
     return createdGasto
   }

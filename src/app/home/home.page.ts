@@ -28,13 +28,17 @@ export class HomePage implements OnInit {
 
   gastos: any[] = [];
 
+  // Initialize newGasto with default values
+  utcDate: Date;
+  localDatetimeStr: string;
+
   newGasto = {
     description: '',
     store: '',
     value: null as number | null, // Allow `null` for default value
-    currency: 'AUD',
+    currency: 'EUR',
     paymentMethod: 'CREDIT',
-    datetime: new Date().toISOString(),
+    datetime: new Date()
   };
 
   constructor(
@@ -42,6 +46,17 @@ export class HomePage implements OnInit {
     private toastController: ToastController
   ) {
     addIcons({ add });
+    this.utcDate = new Date();
+    this.localDatetimeStr = new Date(this.utcDate.getTime() - this.utcDate.getTimezoneOffset() * 60000).toISOString()
+    // this.localDatetimeStr = this.localDatetime;
+    this.newGasto = {
+      description: '',
+      store: '',
+      value: null as number | null, // Allow `null` for default value
+      currency: 'EUR',
+      paymentMethod: 'CREDIT',
+      datetime: new Date()
+    };
   }
 
   async ngOnInit() {
@@ -58,7 +73,12 @@ export class HomePage implements OnInit {
   }
 
   async addGasto() {
-    const newGasto = { ...this.newGasto, value: this.newGasto.value || 0 };
+    const newGasto = {
+      ...this.newGasto,
+      datetime: this.getUTCDatetime().toISOString(),
+      value: this.newGasto.value || 0
+    };
+    console.log('HomePage::addGasto: ', newGasto);
     try {
       const createdGasto = await this.gastosSrv.createGasto(newGasto);
       if (createdGasto) {
@@ -74,9 +94,9 @@ export class HomePage implements OnInit {
       description: '',
       store: '',
       value: null,
-      currency: 'AUD',
+      currency: 'EUR',
       paymentMethod: 'CREDIT',
-      datetime: new Date().toISOString()
+      datetime: new Date()
     };
   }
 
@@ -99,15 +119,26 @@ export class HomePage implements OnInit {
   }
 
   // Getter to convert UTC datetime to local time for display
-  get localDatetime(): string {
-    const utcDate = new Date(this.newGasto.datetime);
-    return new Date(utcDate.getTime() - utcDate.getTimezoneOffset() * 60000).toISOString();
-  }
+  // get localDatetime(): string {
+  //   const utcDate = new Date(this.newGasto.datetime);
+  //   return new Date(utcDate.getTime() - utcDate.getTimezoneOffset() * 60000).toISOString();
+  // }
 
   // Setter to ensure selected local time is stored as UTC
-  set localDatetime(value: string) {
-    const localDate = new Date(value);
-    this.newGasto.datetime = new Date(localDate.getTime() + localDate.getTimezoneOffset() * 60000).toISOString();
+  // set localDatetime(value: string) {
+  //   const localDate = new Date(value);
+  //   this.newGasto.datetime = new Date(localDate.getTime() + localDate.getTimezoneOffset() * 60000).toISOString();
+  // }
+
+  getUTCDatetime(): Date {
+    console.log('HomePage::getUTCDatetime::this.localDatetimeStr: ', this.localDatetimeStr);
+    const localDatetime: Date = new Date(this.localDatetimeStr)
+    console.log('HomePage::getUTCDatetime::localDatetime: ', localDatetime);
+    // const utcDT = new Date(localDatetime.getTime() + localDatetime.getTimezoneOffset() * 60000)
+    const utcDT = new Date(localDatetime.getTime())
+    console.log('HomePage::getUTCDatetime::utcDT: ', utcDT);
+    console.log('HomePage::getUTCDatetime::utcDT.toISOString(): ', utcDT.toISOString());
+    return utcDT
   }
 
 }
