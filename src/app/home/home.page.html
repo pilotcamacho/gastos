@@ -47,11 +47,15 @@
       </ion-select>
     </ion-item>
 
+       <!-- {{ localDatetimeStr }} -->
+
     <ion-item>
       <ion-label position="stacked">Date & Time</ion-label>
       <ion-datetime display-format="MMM DD, YYYY HH:mm" [(ngModel)]="localDatetimeStr" name="datetime"
         required></ion-datetime>
     </ion-item>
+
+ 
 
     <ion-button expand="block" type="submit" [disabled]="!gastoForm.valid">
       Add Gasto <ion-icon slot="icon-only" name="add"></ion-icon>

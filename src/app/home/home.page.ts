@@ -38,7 +38,7 @@ export class HomePage implements OnInit {
     value: null as number | null, // Allow `null` for default value
     currency: 'EUR',
     paymentMethod: 'CREDIT',
-    datetime: new Date()
+    datetime: ''
   };
 
   constructor(
@@ -47,7 +47,7 @@ export class HomePage implements OnInit {
   ) {
     addIcons({ add });
     this.utcDate = new Date();
-    this.localDatetimeStr = new Date(this.utcDate.getTime() - this.utcDate.getTimezoneOffset() * 60000).toISOString()
+    this.localDatetimeStr = new Date(this.utcDate.getTime() - this.utcDate.getTimezoneOffset() * 60000).toISOString().substring(0, 19);
     // this.localDatetimeStr = this.localDatetime;
     this.newGasto = {
       description: '',
@@ -55,7 +55,7 @@ export class HomePage implements OnInit {
       value: null as number | null, // Allow `null` for default value
       currency: 'EUR',
       paymentMethod: 'CREDIT',
-      datetime: new Date()
+      datetime: this.localDatetimeStr
     };
   }
 
@@ -96,7 +96,7 @@ export class HomePage implements OnInit {
       value: null,
       currency: 'EUR',
       paymentMethod: 'CREDIT',
-      datetime: new Date()
+      datetime: this.localDatetimeStr
     };
   }
 
